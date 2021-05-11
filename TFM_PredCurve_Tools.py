@@ -73,8 +73,39 @@ def plot_bid_curve(dataframe, date, hour):
                     label='steps (=steps-pre)')
 
 
+#Function to plot marginal price for a chosen dataframe, date and period (hour)
 
-def df_structure_24h(year_start, month_start, day_start, year_end, month_end, day_end):
+def plot_marginal_price(dataframe, date, hour):
+    df_plot = dataframe[(dataframe['Date'] == date) & (dataframe['Period'] == hour)]
+    return plt.plot(pd.Series(0).append(df_plot['Energy_tot']), 
+                    pd.Series(df_plot['Marg_Price'].iloc[0]).append(df_plot['Marg_Price']), 
+                    drawstyle='steps', 
+                    label='steps (=steps-pre)')
+
+
+#Function to plot bid curves for a chosen dataframe and date
+
+def plot_bid_curve_day(dataframe, date):
+    df_plot = dataframe[(dataframe['Date'] == date)]
+    df_plot['Energy_tot_date'] = df_plot['Energy'].cumsum()
+    return plt.plot(pd.Series(0).append(df_plot['Energy_tot_date']), 
+                    pd.Series(df_plot['Price'].iloc[0]).append(df_plot['Price']), 
+                    drawstyle='steps', 
+                    label='steps (=steps-pre)')
+
+
+#Function to plot marginal price for a chosen dataframe and date
+
+def plot_marginal_price_day(dataframe, date):
+    df_plot = dataframe[(dataframe['Date'] == date)]
+    df_plot['Energy_tot_date'] = df_plot['Energy'].cumsum()
+    return plt.plot(pd.Series(0).append(df_plot['Energy_tot_date']), 
+                    pd.Series(df_plot['Marg_Price'].iloc[0]).append(df_plot['Marg_Price']), 
+                    drawstyle='steps', 
+                    label='steps (=steps-pre)')
+
+
+def df_structure_24h(year_start, month_start, day_start, year_end, month_end, day_end, block_max):
 
     '''This function creates a empty structure of days, hours and blocks between two dates
     without 23h & 25h days'''
@@ -118,7 +149,7 @@ def df_structure_24h(year_start, month_start, day_start, year_end, month_end, da
 
 
 
-def df_structure(year_start, month_start, day_start, year_end, month_end, day_end):
+def df_structure(year_start, month_start, day_start, year_end, month_end, day_end, block_max):
 
     '''This function creates a empty structure of days, hours and blocks between two dates'''
     
