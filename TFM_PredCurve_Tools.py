@@ -305,3 +305,78 @@ def df_pred_summary_noPmax(df):
     df_noPmax = df[df['Price'] != df['Price'].max()]
     
     return df_noPmax
+
+
+
+def data_report(df):
+    first_day = datetime(df['Date'].min().year,
+                         df['Date'].min().month,
+                         df['Date'].min().day)
+
+    last_day = datetime(df['Date'].max().year,
+                        df['Date'].max().month,
+                        df['Date'].max().day)
+
+    num_days_real = (last_day - first_day).days + 1
+    num_days = len(df['Date'].value_counts())
+    diff_num_days = num_days_real - num_days #Number of missing days in original data
+    diff_num_days_rel = diff_num_days / num_days_real * 100
+
+    num_hours_real = num_days_real*24
+    num_hours_orig_real = num_days*24
+    #num_hours = df.groupby(['Date','Period'])['Block'].count().value_counts().sum()
+    diff_num_hours = num_hours_real - num_hours_orig_real
+    diff_num_hours_rel = diff_num_hours / num_hours_real * 100
+    #diff_num_hours_orig = num_hours_orig_real - num_hours
+
+    print('Num. of days: {}'.format(num_days_real))
+    print('Num. of days with bid: {}'.format(num_days))
+    print('Num. of missing days (abs/%): {} / {:.2f}%'.format(diff_num_days, diff_num_days_rel))
+    print('Num. of hours: {}'.format(num_hours_real))    
+    print('Num. of hours with bid: {}'.format(num_hours_orig_real))
+    print('Num. of missing hours (abs/%): {} / {:.2f}%'.format(diff_num_hours, diff_num_hours_rel))
+    #print('Num. of missing hours from non-missing days: {}'.format(diff_num_hours_orig))
+
+
+def data_report_total(df, start, end):
+    
+    start_day = start
+    end_day =end
+    num_days_total = (end_day - start_day).days + 1
+    
+    first_day = datetime(df['Date'].min().year,
+                         df['Date'].min().month,
+                         df['Date'].min().day)
+    last_day = datetime(df['Date'].max().year,
+                        df['Date'].max().month,
+                        df['Date'].max().day)
+    num_days_real = (last_day - first_day).days + 1
+    
+    num_days_bid = len(df['Date'].value_counts())
+    
+    diff_num_days = num_days_total - num_days_bid #Number of missing days in original data
+    diff_num_days_rel = diff_num_days / num_days_total * 100
+
+    num_hours_total = num_days_total*24
+    num_hours_real = num_days_real*24
+    num_hours_bid = df.groupby(['Date','Period'])['Block'].count().value_counts().sum()
+    diff_num_hours = num_hours_total - num_hours_bid
+    diff_num_hours_rel = diff_num_hours / num_hours_total * 100
+    #diff_num_hours_orig = num_hours_orig_real - num_hours
+
+    print('Num. of total days: {}'.format(num_days_total))
+    #print('Num. of observed days: {}'.format(num_days_real))
+    print('Num. of days with bid: {}'.format(num_days_bid))
+    print('Num. of missing days (abs/%): {} / {:.2f}%'.format(diff_num_days, diff_num_days_rel))
+    print('Num. of total hours: {}'.format(num_hours_total))
+    #print('Num. of observed hours: {}'.format(num_hours_real))    
+    print('Num. of hours with bid: {}'.format(num_hours_bid))
+    print('Num. of missing hours (abs/%): {} / {:.2f}%'.format(diff_num_hours, diff_num_hours_rel))
+    #print('Num. of missing hours from non-missing days: {}'.format(diff_num_hours_orig))    
+    
+
+def missing_dates(d):
+    date_set=set(d)
+    missing_dates = [datetime.strftime(x, '%Y-%m-%d') for x in (d[0]+timedelta(x) for x in range((d[-1]-d[0]).days)) if x not in date_set]
+
+    return missing_dates   
