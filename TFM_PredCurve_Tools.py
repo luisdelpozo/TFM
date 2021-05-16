@@ -83,12 +83,23 @@ def plot_marginal_price(dataframe, date, hour):
                     label='steps (=steps-pre)')
 
 
+def plot_bid_margprice(dataframe, date, hour):
+    plt.figure().set_size_inches(10,6);
+    plt.xlabel('Energy - MWh');
+    plt.ylabel('Price - €/MWh');
+    plt.title('BID CURVE PER HOUR') 
+    plot_bid_curve(dataframe, date, hour);
+    plot_marginal_price(dataframe, date, hour);
+    labels = ['Unit Bid', 'Marginal Price']
+    plt.legend(labels,shadow=False, title='Legend');
+
+
 #Function to plot bid curves for a chosen dataframe and date
 
 def plot_bid_curve_day(dataframe, date):
     df_plot = dataframe[(dataframe['Date'] == date)]
     df_plot['Energy_tot_date'] = df_plot['Energy'].cumsum()
-    return plt.plot(pd.Series(0).append(df_plot['Energy_tot_date']), 
+    plt.plot(pd.Series(0).append(df_plot['Energy_tot_date']), 
                     pd.Series(df_plot['Price'].iloc[0]).append(df_plot['Price']), 
                     drawstyle='steps', 
                     label='steps (=steps-pre)')
@@ -99,10 +110,53 @@ def plot_bid_curve_day(dataframe, date):
 def plot_marginal_price_day(dataframe, date):
     df_plot = dataframe[(dataframe['Date'] == date)]
     df_plot['Energy_tot_date'] = df_plot['Energy'].cumsum()
-    return plt.plot(pd.Series(0).append(df_plot['Energy_tot_date']), 
+    plt.plot(pd.Series(0).append(df_plot['Energy_tot_date']), 
                     pd.Series(df_plot['Marg_Price'].iloc[0]).append(df_plot['Marg_Price']), 
                     drawstyle='steps', 
                     label='steps (=steps-pre)')
+
+
+def plot_bid_margprice_day(dataframe, date):
+    plt.figure().set_size_inches(18,4);
+    plt.xlabel('Energy');
+    plt.ylabel('Price - €/MWh');
+    plt.xticks([], []);
+    plt.title('BID CURVES PER DAY') 
+    plot_bid_curve_day(dataframe, date);
+    plot_marginal_price_day(dataframe, date);
+    labels = ['Unit Bid', 'Marginal Price']
+    plt.legend(labels,shadow=False, title='Legend');
+    
+    
+    
+def myplot(axes, data1, data2, minimum,count):
+    axes.plot(pd.Series(0).append(data1), 
+                    pd.Series(minimum).append(data2), 
+                    drawstyle='steps', 
+                    label='steps (=steps-pre)', 
+                    color='red');
+
+    axes.set(title='Hour '+str(count+1));
+    axes.set_xlabel('Energy -MWh');
+    axes.set_ylabel('Price - €/MWh');
+
+    
+def plot_24bids(dataframe, date):
+    
+    #fig = plt.figure();
+    fig, ax = plt.subplots(4, 6, sharex=True, sharey=True);
+    fig.set_size_inches(30, 20);
+    
+    count = 0
+    for i in range(4):
+        for j in range(6):
+            myplot(ax[i,j], 
+               dataframe[(dataframe['Period']==count+1)&(dataframe['Date']==date)]['Energy_tot'], 
+               dataframe[(dataframe['Period']==count+1)&(dataframe['Date']==date)]['Price'],
+               dataframe[(dataframe['Period']==count+1)&(dataframe['Date']==date)]['Price'].min(),
+               count);
+            count +=1
+
 
 
 def df_structure_24h(year_start, month_start, day_start, year_end, month_end, day_end, block_max):
@@ -379,4 +433,10 @@ def missing_dates(d):
     date_set=set(d)
     missing_dates = [datetime.strftime(x, '%Y-%m-%d') for x in (d[0]+timedelta(x) for x in range((d[-1]-d[0]).days)) if x not in date_set]
 
-    return missing_dates   
+    return missing_dates
+
+def bid_hour_summary(df, block_all):
+    df_bid_hour = pd.DataFrame(df[df['Block']==block_all].groupby('Period')['Price'].count())
+    df_bid_hour.index.rename('Hour', inplace=True)
+    df_bid_hour.rename(columns={'Price': 'Num. Bids'}, inplace=True)
+    return df_bid_hour.T
