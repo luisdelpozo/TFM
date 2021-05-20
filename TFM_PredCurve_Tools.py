@@ -67,7 +67,7 @@ def days_25h_23h(data):
 
 def plot_bid_curve(dataframe, date, hour):
     df_plot = dataframe[(dataframe['Date'] == date) & (dataframe['Period'] == hour)]
-    return plt.plot(pd.Series(0).append(df_plot['Energy_tot']), 
+    plt.plot(pd.Series(0).append(df_plot['Energy_tot']), 
                     pd.Series(df_plot['Price'].iloc[0]).append(df_plot['Price']), 
                     drawstyle='steps', 
                     label='steps (=steps-pre)')
@@ -77,17 +77,17 @@ def plot_bid_curve(dataframe, date, hour):
 
 def plot_marginal_price(dataframe, date, hour):
     df_plot = dataframe[(dataframe['Date'] == date) & (dataframe['Period'] == hour)]
-    return plt.plot(pd.Series(0).append(df_plot['Energy_tot']), 
+    plt.plot(pd.Series(0).append(df_plot['Energy_tot']), 
                     pd.Series(df_plot['Marg_Price'].iloc[0]).append(df_plot['Marg_Price']), 
                     drawstyle='steps', 
                     label='steps (=steps-pre)')
 
 
-def plot_bid_margprice(dataframe, date, hour):
+def plot_bid_margprice(dataframe, date, hour, unit):
     plt.figure().set_size_inches(10,6);
     plt.xlabel('Energy - MWh');
     plt.ylabel('Price - €/MWh');
-    plt.title('BID CURVE PER HOUR') 
+    plt.title('BID CURVE ' + unit + ' (DATE: ' + date + ' / HOUR: ' + str(hour) + ')')  
     plot_bid_curve(dataframe, date, hour);
     plot_marginal_price(dataframe, date, hour);
     labels = ['Unit Bid', 'Marginal Price']
@@ -116,12 +116,12 @@ def plot_marginal_price_day(dataframe, date):
                     label='steps (=steps-pre)')
 
 
-def plot_bid_margprice_day(dataframe, date):
+def plot_bid_margprice_day(dataframe, date, unit):
     plt.figure().set_size_inches(18,4);
     plt.xlabel('Energy');
     plt.ylabel('Price - €/MWh');
     plt.xticks([], []);
-    plt.title('BID CURVES PER DAY') 
+    plt.title('BID CURVES ' + unit + ' (DATE: ' + date + ')')
     plot_bid_curve_day(dataframe, date);
     plot_marginal_price_day(dataframe, date);
     labels = ['Unit Bid', 'Marginal Price']
@@ -158,7 +158,76 @@ def plot_24bids(dataframe, date):
             count +=1
 
 
+def plot_bid_timeperiod(dataframe, start_date, end_date, start_sel_block, end_sel_block, block_all):
+    plt.figure().set_size_inches(18,5)    
+    
+    df = dataframe.loc[start_date+' 01':end_date+' 23']
+    
+    plt.plot(df[df['Block']==block_all].index, df[df['Block']==block_all]['Marg_Price'], 
+             linewidth=.8);
+    
+    legend = ['Marg Price']
+    for block in range(start_sel_block, end_sel_block+1):
+        plt.scatter(df[df['Block']==block].index,df[df['Block']==block]['Price'], s=0.3)
+        legend.append('Block '+str(block))
 
+    plt.xlabel('Time');
+    plt.ylabel('Price - €/MWh');
+    plt.title('BID PRICE (from ' + start_date + ' to ' + end_date + ')') 
+    plt.legend(legend,loc='right', shadow=False, title='Legend');
+
+
+def plot_bid_timeperiod_line(dataframe, start_date, end_date, start_sel_block, end_sel_block, block_all):
+    plt.figure().set_size_inches(18,5)    
+    
+    df = dataframe.loc[start_date+' 01':end_date+' 23']
+    
+    plt.scatter(df[df['Block']==block_all].index, df[df['Block']==block_all]['Marg_Price'], 
+             s=.5);
+    
+    legend = ['Marg Price']
+    for block in range(start_sel_block, end_sel_block+1):
+        plt.plot(df[df['Block']==block].index,df[df['Block']==block]['Price'])
+        legend.append('Block '+str(block))
+
+    plt.xlabel('Time');
+    plt.ylabel('Price - €/MWh');
+    plt.title('BID PRICE (from ' + start_date + ' to ' + end_date + ')') 
+    plt.legend(legend,loc='right', shadow=False, title='Legend');    
+
+def plot_energy_timeperiod(dataframe, start_date, end_date, start_sel_block, end_sel_block, block_all):
+    plt.figure().set_size_inches(18,5)    
+    
+    df = dataframe.loc[start_date+' 01':end_date+' 23']
+    
+    legend = []
+    for block in range(start_sel_block, end_sel_block+1):
+        plt.scatter(df[df['Block']==block].index,df[df['Block']==block]['Energy_tot'], s=0.3)
+        legend.append('Block '+str(block))
+
+    plt.xlabel('Time');
+    plt.ylabel('Energy - MWh');
+    plt.title('BID ENERGY (from ' + start_date + ' to ' + end_date + ')') 
+    plt.legend(legend,loc='right', shadow=False, title='Legend');
+    
+
+def plot_energy_timeperiod_line(dataframe, start_date, end_date, start_sel_block, end_sel_block, block_all):
+    plt.figure().set_size_inches(18,5)    
+    
+    df = dataframe.loc[start_date+' 01':end_date+' 23']
+    
+    legend = []
+    for block in range(start_sel_block, end_sel_block+1):
+        plt.plot(df[df['Block']==block].index,df[df['Block']==block]['Energy_tot'])
+        legend.append('Block '+str(block))
+
+    plt.xlabel('Time');
+    plt.ylabel('Energy - MWh');
+    plt.title('BID ENERGY (from ' + start_date + ' to ' + end_date + ')') 
+    plt.legend(legend,loc='right', shadow=False, title='Legend');
+    
+    
+    
 def df_structure_24h(year_start, month_start, day_start, year_end, month_end, day_end, block_max):
 
     '''This function creates a empty structure of days, hours and blocks between two dates
