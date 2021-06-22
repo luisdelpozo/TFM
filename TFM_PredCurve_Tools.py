@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import datetime as dt
 from datetime import datetime, timedelta
+from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 
 #Function created for showing for a certain day and hour of df_curve
@@ -175,7 +176,7 @@ def plot_bid_timeperiod(dataframe, start_date, end_date, start_sel_block, end_se
     plt.ylabel('Price - €/MWh');
     plt.title('BID PRICE (from ' + start_date + ' to ' + end_date + ')') 
     plt.legend(legend,loc='right', shadow=False, title='Legend');
-
+    
 
 def plot_bid_timeperiod_line(dataframe, start_date, end_date, start_sel_block, end_sel_block, block_all):
     plt.figure().set_size_inches(18,5)    
@@ -509,3 +510,21 @@ def bid_hour_summary(df, block_all):
     df_bid_hour.index.rename('Hour', inplace=True)
     df_bid_hour.rename(columns={'Price': 'Num. Bids'}, inplace=True)
     return df_bid_hour.T
+
+
+def MAE_model(df_summary):
+    
+    MAE_model_list = [mean_absolute_error(df_summary['dE'],df_summary['dE_pred']),
+                      mean_absolute_error(df_summary['Price'],df_summary['Price_pred']),
+                      mean_absolute_error(df_summary[['Price','dE']],df_summary[['Price_pred','dE_pred']]),
+                      mean_absolute_error(df_summary['Area'],df_summary['Area_pred'])]
+    return MAE_model_list
+
+
+def RMSE_model(df_summary):
+    
+    RMSE_model_list = [np.sqrt(mean_squared_error(df_summary['dE'],df_summary['dE_pred'])),
+                      np.sqrt(mean_squared_error(df_summary['Price'],df_summary['Price_pred'])),
+                      np.sqrt(mean_squared_error(df_summary[['Price','dE']],df_summary[['Price_pred','dE_pred']])),
+                      np.sqrt(mean_squared_error(df_summary['Area'],df_summary['Area_pred']))]
+    return RMSE_model_list
