@@ -14,6 +14,7 @@ def data_date_hour_info(data, date, hour):
 
 
 def convert_to_df_curve(data):
+    
     df_curve = data[['Pot_max', 'Year', 'Month', 'Day', 'Period', 'Block', 'Price', 'Energy']]
 
     #Including date and week day per each day.
@@ -68,7 +69,10 @@ def days_25h_23h(data):
 
 def plot_bid_curve(dataframe, date, hour):
     df_plot = dataframe[(dataframe['Date'] == date) & (dataframe['Period'] == hour)]
-    plt.plot(pd.Series(0).append(df_plot['Energy_tot']), 
+    if len(df_plot) == 0:
+        print('NO DATA IN DATAFRAME FOR THAT CHOICE')
+    else:
+        plt.plot(pd.Series(0).append(df_plot['Energy_tot']), 
                     pd.Series(df_plot['Price'].iloc[0]).append(df_plot['Price']), 
                     drawstyle='steps', 
                     label='steps (=steps-pre)')
@@ -78,10 +82,15 @@ def plot_bid_curve(dataframe, date, hour):
 
 def plot_marginal_price(dataframe, date, hour):
     df_plot = dataframe[(dataframe['Date'] == date) & (dataframe['Period'] == hour)]
-    plt.plot(pd.Series(0).append(df_plot['Energy_tot']), 
+    if len(df_plot) == 0:
+        print('NO DATA IN DATAFRAME FOR THAT CHOICE')
+    else:
+        plt.plot(pd.Series(0).append(df_plot['Energy_tot']), 
                     pd.Series(df_plot['Marg_Price'].iloc[0]).append(df_plot['Marg_Price']), 
                     drawstyle='steps', 
-                    label='steps (=steps-pre)')
+                    label='steps (=steps-pre)',
+                    ls = '--',
+                    lw = 2)
 
 
 def plot_bid_margprice(dataframe, date, hour, unit):
@@ -99,8 +108,11 @@ def plot_bid_margprice(dataframe, date, hour, unit):
 
 def plot_bid_curve_day(dataframe, date):
     df_plot = dataframe[(dataframe['Date'] == date)]
-    df_plot['Energy_tot_date'] = df_plot['Energy'].cumsum()
-    plt.plot(pd.Series(0).append(df_plot['Energy_tot_date']), 
+    if len(df_plot) == 0:
+        print('NO DATA IN DATAFRAME FOR THAT CHOICE')
+    else:
+        df_plot['Energy_tot_date'] = df_plot['Energy'].cumsum()
+        plt.plot(pd.Series(0).append(df_plot['Energy_tot_date']), 
                     pd.Series(df_plot['Price'].iloc[0]).append(df_plot['Price']), 
                     drawstyle='steps', 
                     label='steps (=steps-pre)')
@@ -110,11 +122,16 @@ def plot_bid_curve_day(dataframe, date):
 
 def plot_marginal_price_day(dataframe, date):
     df_plot = dataframe[(dataframe['Date'] == date)]
-    df_plot['Energy_tot_date'] = df_plot['Energy'].cumsum()
-    plt.plot(pd.Series(0).append(df_plot['Energy_tot_date']), 
+    if len(df_plot) == 0:
+        print('NO DATA IN DATAFRAME FOR THAT CHOICE')
+    else:
+        df_plot['Energy_tot_date'] = df_plot['Energy'].cumsum()
+        plt.plot(pd.Series(0).append(df_plot['Energy_tot_date']), 
                     pd.Series(df_plot['Marg_Price'].iloc[0]).append(df_plot['Marg_Price']), 
                     drawstyle='steps', 
-                    label='steps (=steps-pre)')
+                    label='steps (=steps-pre)',
+                    ls = '--',
+                    lw = 2)
 
 
 def plot_bid_margprice_day(dataframe, date, unit):
@@ -144,19 +161,23 @@ def myplot(axes, data1, data2, minimum,count):
     
 def plot_24bids(dataframe, date):
     
-    #fig = plt.figure();
-    fig, ax = plt.subplots(4, 6, sharex=True, sharey=True);
-    fig.set_size_inches(30, 20);
+    df_plot = dataframe[(dataframe['Date'] == date)]
+    if len(df_plot) == 0:
+        print('NO DATA IN DATAFRAME FOR THAT CHOICE')
+    else:
+        #fig = plt.figure();
+        fig, ax = plt.subplots(4, 6, sharex=True, sharey=True);
+        fig.set_size_inches(30, 20);
     
-    count = 0
-    for i in range(4):
-        for j in range(6):
-            myplot(ax[i,j], 
-               dataframe[(dataframe['Period']==count+1)&(dataframe['Date']==date)]['Energy_tot'], 
-               dataframe[(dataframe['Period']==count+1)&(dataframe['Date']==date)]['Price'],
-               dataframe[(dataframe['Period']==count+1)&(dataframe['Date']==date)]['Price'].min(),
-               count);
-            count +=1
+        count = 0
+        for i in range(4):
+            for j in range(6):
+                myplot(ax[i,j], 
+                   dataframe[(dataframe['Period']==count+1)&(dataframe['Date']==date)]['Energy_tot'], 
+                   dataframe[(dataframe['Period']==count+1)&(dataframe['Date']==date)]['Price'],
+                   dataframe[(dataframe['Period']==count+1)&(dataframe['Date']==date)]['Price'].min(),
+                   count);
+                count +=1
 
 
 def plot_bid_timeperiod(dataframe, start_date, end_date, start_sel_block, end_sel_block, block_all):
