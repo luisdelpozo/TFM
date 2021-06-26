@@ -20,7 +20,7 @@ def convert_to_df_curve(data):
     #Including date and week day per each day.
     #Including date
     df_curve['Date']= pd.to_datetime(df_curve[['Year', 'Month', 'Day']])
-
+    
     #Including weekdays as it is an important information
     df_curve['Weekday'] = df_curve['Date'].apply(lambda x: x.weekday())
     weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
