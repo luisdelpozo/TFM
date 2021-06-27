@@ -76,7 +76,8 @@ def plot_bid_curve(dataframe, date, hour):
                     pd.Series(df_plot['Price'].iloc[0]).append(df_plot['Price']), 
                     drawstyle='steps', 
                     label='steps (=steps-pre)')
-
+    plt.xlabel('Energy - MWh');
+    plt.ylabel('Price - €/MWh');
 
 #Function to plot marginal price for a chosen dataframe, date and period (hour)
 
@@ -91,7 +92,8 @@ def plot_marginal_price(dataframe, date, hour):
                     label='steps (=steps-pre)',
                     ls = '--',
                     lw = 2)
-
+    plt.xlabel('Energy - MWh');
+    plt.ylabel('Price - €/MWh');
 
 def plot_bid_margprice(dataframe, date, hour, unit):
     plt.figure().set_size_inches(10,6);
@@ -116,7 +118,8 @@ def plot_bid_curve_day(dataframe, date):
                     pd.Series(df_plot['Price'].iloc[0]).append(df_plot['Price']), 
                     drawstyle='steps', 
                     label='steps (=steps-pre)')
-
+    plt.xlabel('Energy - MWh');
+    plt.ylabel('Price - €/MWh');
 
 #Function to plot marginal price for a chosen dataframe and date
 
@@ -132,7 +135,8 @@ def plot_marginal_price_day(dataframe, date):
                     label='steps (=steps-pre)',
                     ls = '--',
                     lw = 2)
-
+    plt.xlabel('Energy - MWh');
+    plt.ylabel('Price - €/MWh');
 
 def plot_bid_margprice_day(dataframe, date, unit):
     plt.figure().set_size_inches(18,4);
@@ -549,3 +553,43 @@ def RMSE_model(df_summary):
                       np.sqrt(mean_squared_error(df_summary[['Price','dE']],df_summary[['Price_pred','dE_pred']])),
                       np.sqrt(mean_squared_error(df_summary['Area'],df_summary['Area_pred']))]
     return RMSE_model_list
+
+
+def bid_comparison(dataframe, date, hour):
+    #sns.set_theme(style='darkgrid')
+    plt.figure().set_size_inches(12,6) 
+    
+    unit_list = dataframe['Unit'].unique()
+    legend_list = []
+    
+    for unit in unit_list:
+        plot_bid_curve(dataframe[dataframe['Unit']==unit], date, hour)
+        if len(dataframe[(dataframe['Unit']==unit) & 
+                         (dataframe['Date'] == date) & 
+                         (dataframe['Period'] == hour)]):
+            legend_list = np.append(legend_list, unit)
+
+    df_plot = dataframe[(dataframe['Date'] == date) & (dataframe['Period'] == hour)]
+    plt.plot(pd.Series(0).append(df_plot['Pot_max']), 
+                        pd.Series(df_plot['Marg_Price'].iloc[0]).append(df_plot['Marg_Price']), 
+                        drawstyle = 'steps', 
+                        label = 'steps (=steps-pre)',
+                        lw = 3,
+                        color = 'red');
+    plt.legend(np.append(legend_list,'Marg_Price'))
+
+
+def bid_comp_cumm(dataframe, date, hour):
+    df_plot_all = dataframe[(dataframe['Date']==date) & (dataframe['Period']==hour)]
+    df_plot_all = df_plot_all.sort_values('Price')
+    df_plot_all.reset_index(drop=True, inplace=True)
+    #Creating the variable cumulative sum of block energy to plot the curve
+    df_plot_all['Energy_tot'] = df_plot_all['Energy'].cumsum()
+    
+    sns.relplot(data=df_plot_all, x='Energy_tot', y='Price', hue='Unit', height=6, aspect=1.5,
+               style='Unit', size='Unit', sizes=(100, 200));
+    plt.plot(df_plot_all['Energy_tot'], df_plot_all['Marg_Price'], ls = '--', lw = 2, color = 'red');
+    plt.xlabel('Energy - MWh');
+    plt.ylabel('Price - €/MWh');
+
+
