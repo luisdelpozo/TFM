@@ -40,24 +40,13 @@ else:
     
 df_unit = pd.read_csv(unit_path + unit + '_DataFrame.csv',index_col=0)
 
-#year_list = df_unit['Year'].unique()
-#year = st.selectbox('SELECT A YEAR', year_list)
-    
-#month_list = df_unit[df_unit['Year']==year]['Month'].unique()
-#month = st.selectbox('SELECT A MONTH', month_list)
-    
-#day_list = df_unit[(df_unit['Year']==year) & 
-#                    (df_unit['Month']==month)]['Day'].unique()
-#day = st.selectbox('SELECT A DAY', day_list)
-    
-#date = str(year) + '-' + str(month) + '-' + str(day)
-
 df_unit['Date'] = df_unit['Date'].astype('datetime64[ns]')
 
 df_unit.rename(columns={"Period": "Hour"}, inplace = True)
 df_unit['Date_Hour'] = pd.to_datetime(df_unit[['Year', 'Month', 'Day', 'Hour']])
 df_unit_reduced = df_unit.set_index('Date_Hour') #New time index is created
-df_unit_reduced = df_unit_reduced[['Block', 'Hour', 'Energy_tot', 'Price', 'Marg_Price', 'NG_Price']]
+#df_unit_reduced = df_unit_reduced[['Block', 'Hour', 'Energy_tot', 'Price', 'Marg_Price', 'NG_Price']]
+df_unit_reduced = df_unit_reduced[['Block', 'Hour', 'Energy_tot', 'Price', 'Marg_Price']]
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
