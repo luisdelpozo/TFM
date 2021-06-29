@@ -1,9 +1,9 @@
 # SALE OFFERS PREDICTION IN THE SPANISH DAY-AHEAD ELECTRICITY MARKET
 
 
-### TFM - DATA SCIENCE MASTER, 26th edition (MAD) - KSCHOOL - July, 2021
+**TFM - DATA SCIENCE MASTER, 26th edition (MAD) - KSCHOOL - July, 2021**
 
-### LUIS MUÑOZ DEL POZO
+**LUIS MUÑOZ DEL POZO**
 
 
 
@@ -15,7 +15,7 @@ This TFM explores the way **combined cycle** and **hydraulic** units present the
 
 ## 2. OBJECTIVE
 
-The first objective of this TMF is to retrieve, understand, and process the public information of the sales offers that OMIE publishes every day, after a confidentiality period of 90 days.
+The first objective of this TMF is to retrieve, understand, and process the public information of the sale offers that OMIE publishes every day, after a confidentiality period of 90 days.
 
 The second objective of this work is to find a way to predict the sale offers for combined cycle, and hydraulic units.
 
@@ -31,12 +31,12 @@ The TFM is divided in the following parts:
 
 - **00_MEMORIA.pdf**. This document explains deeply the TFM structure, main objectives, description of the raw data, methodology, summary of main results, conclusions, and the frontend user manual.
 
-- **Notebooks and functions:
-   - **Notebooks from 01 to 04**. Notebooks where raw data is retrieved, studied, and managed in a first phase, previous to the final data preparation to use them in the models.
+- **Notebooks and functions:**
+   - **Notebooks from 01 to 04**. Notebooks where raw data are retrieved, studied, and managed in a first phase, previous to the final data preparation in the model notebooks.
    
-   - **Notebooks from 10 to 18**. Notebooks where combined cycle unit bids are studied, data is prepared, and a prediction model is created and tested against a naive model.
+   - **Notebooks from 10 to 18**. Notebooks where combined cycle unit bids are studied, data are prepared, and a prediction model is created and tested against a naive model.
    
-   - **Notebooks from 20 to 23**. Notebooks where hydraulic unit bids are studied, data is prepared, and a prediction model is created and tested against a naive model.
+   - **Notebooks from 20 to 23**. Notebooks where hydraulic unit bids are studied, data are prepared, and a prediction model is created and tested against a naive model.
    
    - **Notebook 30_UNITS_Bid_Comparison.ipynb**. Notebook where different unit bids are compared.
    
@@ -54,8 +54,6 @@ In order to be able to run the code in the notebooks, the folder, subfolders and
 
 At the end of this process, the folders/file structure of the TFM must be the following:
 
-![image1](https://github.com/luisdelpozo/TFM/blob/main/TFM_FILE_STRUCTURE.jpg)
+![image1](https://github.com/luisdelpozo/TFM/blob/main/TFM_FILE_STRUCTURE.jpg "TFM folders/files structure.")
 
-**TFM folders/files structure.**
 
-**3. Requirements**
