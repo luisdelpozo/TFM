@@ -7,6 +7,8 @@
 
 
 
+
+
 ## 1. INTRODUCTION
 
 This TFM explores the way **combined cycle** and **hydraulic** units present their bids to the Nominated Electricity Market Operator (**OMIE**) every day in the Spanish day-ahead electricity market, and tries to find out a method to predict these offers with **ML techniques**, and only **public information**.
