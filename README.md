@@ -36,7 +36,7 @@ The TFM is divided in the following parts:
 - **00_MEMORIA.pdf**. This document explains deeply the TFM structure, main objectives, description of the raw data, methodology, summary of main results, conclusions, and the frontend user manual.
 
 - **Notebooks and functions:**
-   - **Notebooks from 01 to 04**. Notebooks where raw data are retrieved, studied, and managed in a first phase, previous to the final data preparation in the model notebooks. Note that, in order to run the model notebooks, it is not necessary to run these notebooks, since the output data of them have been storaged locally (in **"./Data_Input/"** folder, as explained above). This notebooks use some UNIX terminal commands, so if they are runned in Windows, slights modifications would be needed.
+   - **Notebooks from 01 to 04**. Notebooks where raw data are retrieved, studied, and managed in a first phase, previous to the final data preparation in the model notebooks. Note that, in order to run the model notebooks, it is not necessary to run these notebooks, since the output data of them have been stored locally (in **"./Data_Input/"** folder, as explained below). This notebooks use some UNIX terminal commands, so if they are run in Windows, slights modifications would be needed.
    
    - **Notebooks from 10 to 18**. Notebooks where combined cycle unit bids are studied, model data are prepared, and a prediction models are created and tested against a naive model.
    
@@ -54,7 +54,7 @@ The TFM is divided in the following parts:
         > pip install TFM_Requirements.txt
 
 
-**2. Raw data, input data of the notebooks, output data from the notebooks, and pickle files**. All these files have been stored in Google Drive in the following link: https://drive.google.com/drive/folders/1HPIvBoqFMj2icafklc6Eh3OAt1r2OqV6?usp=sharing
+**2. Raw data, input data of the notebooks, output data from the notebooks, and pickle files**. All these files have been stored in Google Drive in the following link: **https://drive.google.com/drive/folders/1HPIvBoqFMj2icafklc6Eh3OAt1r2OqV6?usp=sharing**
 
 In order to be able to run the code in the notebooks, the folder, subfolders and files stored in Google Drive must be downloaded in the same folder where REPO files are, and with the same structure as they are in the link. After downloading them, the “.zip” files (**Pickle_Models.zip** and **Raw_Data.zip**) must be unzipped.
 
