@@ -49,7 +49,9 @@ The TFM is divided in the following parts:
       
    - **TFM_PredCurve_Tools.py**. In this file, different functions are stored to be used in the notebooks.
    
-   - **TFM_Requirements.txt**. In this file, all libraries and requirements to run the notebooks are listed. To be able to run
+   - **TFM_Requirements.txt**. In this file, all libraries and requirements to run the notebooks are listed. To install all the required libraries and dependencies it is necessary to run the following code:
+   
+   > pip install TFM_Requirements.txt
 
 
 **2. Raw data, input data of the notebooks, output data from the notebooks, and pickle files**. All these files have been stored in Google Drive in the following link: https://drive.google.com/drive/folders/1HPIvBoqFMj2icafklc6Eh3OAt1r2OqV6?usp=sharing
